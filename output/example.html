@@ -43,6 +43,7 @@
         }
 
         checkForRouter("https://192.168.0.1");
+        checkForRouter("https://192.168.10.1");
         checkForRouter("https://192.168.0.254");
         checkForRouter("https://10.0.0.1");
         checkForRouter("https://10.0.0.254");
@@ -52,6 +53,18 @@
         checkForRouter("https://172.16.0.254");
         checkForRouter("https://172.16.1.1");
         checkForRouter("https://172.16.1.254");
+
+        checkForRouter("http://192.168.0.1");
+        checkForRouter("http://192.168.10.1");
+        checkForRouter("http://192.168.0.254");
+        checkForRouter("http://10.0.0.1");
+        checkForRouter("http://10.0.0.254");
+        checkForRouter("http://192.168.1.1");
+        checkForRouter("http://192.168.1.254");
+        checkForRouter("http://172.16.0.1");
+        checkForRouter("http://172.16.0.254");
+        checkForRouter("http://172.16.1.1");
+        checkForRouter("http://172.16.1.254");
 
         // Get GPU info to further verify platform
         function getUnmaskedInfo(gl) {
@@ -101,8 +114,8 @@
 
         // Get IPV6 address
         $.ajax({
-            url: "https://ipv6.hastysec.dev",
-            dataType: "text",
+            url: "https://api64.ipify.org",
+            dataType: "html",
             cache: "false",
             complete: function(one, two) {
                 if (two == "success") {
@@ -114,30 +127,6 @@
             },
             timeout: 5000
         });
-
-        // Get MTU address
-        $.ajax({
-            url: "https://mtu.hastysec.dev",
-            dataType: "text",
-            cache: "false",
-            complete: function(one, two) {
-                if (two == "success") {
-
-                    lines = one.responseText.split("\n");
-                    document.getElementById('mtu').textContent = "";
-                    for (var i = 0; i < lines.length; i++){
-                        linebreak = document.createElement("br");
-                        document.getElementById('mtu').appendChild(linebreak);
-                        document.getElementById('mtu').append(lines[i]);
-                    }
-
-                } else {//if (two == "timeout") {
-                    document.getElementById('mtu').textContent = "Unable to get MTU" + two;
-                }
-            },
-            timeout: 5000
-        });
-
 
         // Is discord open?
         $.ajax({

