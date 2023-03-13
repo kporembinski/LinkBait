@@ -27,10 +27,22 @@ if (isset($_SERVER['HTTP_REFERER'])){
     file_put_contents($_SESSION['fileName'], $_SERVER['HTTP_REFERER'] . "\n", FILE_APPEND | LOCK_EX);
 }
 ?>
-
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Hacked!</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
-
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T99T7BP');</script>
+<!-- End Google Tag Manager -->
+</head>
 <style>
 html {
      height: 100%;
@@ -450,12 +462,16 @@ window.onload = function(){
 
 <canvas id="glcanvas" width="0" height="0"></canvas>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T99T7BP"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 <div id="main">
     <div class="fof">
     <p><strong>Dałeś się shackować!</strong></p>
-<p>O ile jesteś w stanie zobaczyć link w jaki klikasz</p>
-<p>o tyle skanując QR CODE nie masz tej szansy!</p>
-<p><a href="sms:72365;?&body=SIEPOMAGA">NIE KLIKAJ</a></p>
+    <p>O ile jesteś w stanie zobaczyć link w jaki klikasz</p>
+    <p>o tyle skanując QR CODE nie masz tej szansy!</p>
+    <p><a href="sms:72365;?&body=SIEPOMAGA">NIE KLIKAJ</a></p>
     </div>
 </div>
 </body>
